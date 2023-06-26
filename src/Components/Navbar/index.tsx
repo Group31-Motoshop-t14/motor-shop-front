@@ -83,7 +83,7 @@ export const Navbar = () => {
               isAdvertiser={isAdvertiser}
               menuAuthIsOpen={menuAuthIsOpen}
               toogleMenuAuth={toogleMenuAuth}
-              name={userProfile!.name}
+              name={userProfile ? userProfile.name : " "}
               closeMenuAuth={closeMenuAuth}
             />
           ) : (
@@ -100,7 +100,7 @@ export const Navbar = () => {
                   isAdvertiser={isAdvertiser}
                   menuAuthIsOpen={menuAuthIsOpen}
                   toogleMenuAuth={toogleMenuAuth}
-                  name={userProfile!.name}
+                  name={userProfile ? userProfile.name : " "}
                   closeMenuAuth={closeMenuAuth}
                 />
               </nav>
