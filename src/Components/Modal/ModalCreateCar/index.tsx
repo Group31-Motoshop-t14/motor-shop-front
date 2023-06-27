@@ -12,6 +12,8 @@ import { parseCookies } from "nookies";
 import { useContext, useEffect, useState } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { createCarSchema, ICarsCreate } from "./createCar.schema";
+import { Spinner } from "@material-tailwind/react";
+import { toast } from "react-hot-toast";
 
 interface EnumValuesType {
   [index: number]: string;
@@ -31,6 +33,7 @@ export const ModalCreateCar = () => {
 
   const { closeModal, openModal } = useContext(ModalContext);
   const { setCars } = useContext(AnnouncementContext);
+  const [loading, setLoading] = useState(false);
 
   const {
     register,
@@ -38,7 +41,7 @@ export const ModalCreateCar = () => {
     setValue,
     control,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
     formState
   } = useForm<ICarsCreate>({
     resolver: zodResolver(createCarSchema)
@@ -49,6 +52,8 @@ export const ModalCreateCar = () => {
   const carSubmit = async (data: ICarsCreate) => {
     const { links, ...restData } = data;
     const url = links.map((item) => item.url);
+    const toaster = toast.loading("Registrando seu carro, aguarde!");
+    setLoading(true);
     try {
       const cookies = parseCookies();
       const token = cookies["@motors-shop:token"];
@@ -56,9 +61,14 @@ export const ModalCreateCar = () => {
       const response = await api.post<IcarAnnouncement>("/cars", { ...restData, url });
       setCars((oldAnnoucements) => [response.data, ...oldAnnoucements]);
       closeModal();
+      toast.dismiss(toaster);
       openModal("sucessCreateCar", "Sucesso!");
     } catch (error) {
       console.log(error);
+      toast.dismiss(toaster);
+      toast.error("Erro ao registrar seu carro!");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -166,6 +176,7 @@ export const ModalCreateCar = () => {
           control={control}
           render={({ field }) => (
             <Select
+              disabled={loading}
               label="Marca"
               error={
                 isSubmitted === true
@@ -198,7 +209,7 @@ export const ModalCreateCar = () => {
                     : undefined
                   : undefined
               }
-              disabled={selectModelDisabled}
+              disabled={selectModelDisabled || loading}
               {...field}
               onChange={(e) => {
                 handleModelChangeWrapper(e);
@@ -255,6 +266,7 @@ export const ModalCreateCar = () => {
               register={register("mileage")}
               error={isSubmitted ? errors.mileage?.message : undefined}
               placeholder="KM 0.0"
+              disabled={loading}
             />
             <Input
               label="Cor"
@@ -263,6 +275,7 @@ export const ModalCreateCar = () => {
               error={isSubmitted ? errors.color?.message : undefined}
               onChange={(event) => setValue("color", event.target.value)}
               placeholder="Digite uma cor"
+              disabled={loading}
             />
           </div>
 
@@ -290,6 +303,7 @@ export const ModalCreateCar = () => {
               register={register("price")}
               error={isSubmitted ? errors.price?.message : undefined}
               placeholder="R$ 0.00"
+              disabled={loading}
             />
           </div>
         </div>
@@ -300,6 +314,7 @@ export const ModalCreateCar = () => {
             register={register("description")}
             error={isSubmitted ? errors.description?.message : undefined}
             placeholder="Digite sua descrição..."
+            disabled={loading}
           />
           <Input
             label="Imagem da capa"
@@ -308,6 +323,7 @@ export const ModalCreateCar = () => {
             onChange={(event) => setValue("coverImage", event.target.value)}
             error={isSubmitted ? errors.coverImage?.message : undefined}
             placeholder="https://..."
+            disabled={loading}
           />
         </div>
 
@@ -324,6 +340,7 @@ export const ModalCreateCar = () => {
                       error={isSubmitted ? errors.links?.[index]?.url?.message : undefined}
                       placeholder="https://..."
                       formNoValidate
+                      disabled={loading}
                     />
                   </div>
                   <div className="absolute right-0 top-1">
@@ -342,7 +359,8 @@ export const ModalCreateCar = () => {
           <button
             type="button"
             onClick={addNewUrlLinks}
-            className="w-full max-w-[315px]  rounded border-Brand4 bg-Brand4 px-3 py-3 text-sm font-semibold text-Brand1">
+            className="w-full max-w-[315px]  rounded border-Brand4 bg-Brand4 px-3 py-3 text-sm font-semibold text-Brand1"
+            disabled={loading}>
             Adicionar campo para imagem da galeria
           </button>
         </div>
@@ -355,9 +373,12 @@ export const ModalCreateCar = () => {
             Cancelar
           </button>
           <button
-            className="w-auto rounded border-Brand3 bg-Brand3 px-5 py-3 text-base font-semibold text-Brand4"
-            type="submit">
-            Criar anúncio
+            className={`${
+              !isValid || loading ? "border-Brand3 bg-Brand3" : "border-Brand1 bg-Brand1"
+            } w-auto rounded px-5 py-3 text-base font-semibold text-Brand4`}
+            type="submit"
+            disabled={!isValid || loading}>
+            {loading ? <Spinner color="blue-gray" /> : "Criar anúncio"}
           </button>
         </div>
       </form>

@@ -8,6 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useContext, useEffect, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { editCarSchema, ICarsEdit, IimagesCar } from "./schema";
+import { Spinner } from "@material-tailwind/react";
 
 export const ModalEditAnnoucement = () => {
   const [loading, setLoading] = useState(false);
@@ -179,6 +180,7 @@ export const ModalEditAnnoucement = () => {
               placeholder="KM 0.0"
               register={register("mileage")}
               error={errors.mileage?.message}
+              disabled={loading}
             />
             <Input
               label="Cor"
@@ -186,6 +188,7 @@ export const ModalEditAnnoucement = () => {
               placeholder="Digite uma cor"
               register={register("color")}
               error={errors.color?.message}
+              disabled={loading}
             />
           </div>
           <div className="flex gap-5">
@@ -203,6 +206,7 @@ export const ModalEditAnnoucement = () => {
               placeholder="R$ 0.00"
               register={register("price")}
               error={errors.price?.message}
+              disabled={loading}
             />
           </div>
         </div>
@@ -223,6 +227,7 @@ export const ModalEditAnnoucement = () => {
                 {...register("isPublished")}
                 onChange={(e) => handleRadioChange(e.target.value)}
                 className="sr-only"
+                disabled={loading}
               />
               <span className="select-none">Sim</span>
             </label>
@@ -239,6 +244,7 @@ export const ModalEditAnnoucement = () => {
                 {...register("isPublished")}
                 onChange={(e) => handleRadioChange(e.target.value)}
                 className="sr-only"
+                disabled={loading}
               />
               <span className="select-none">Não</span>
             </label>
@@ -250,6 +256,7 @@ export const ModalEditAnnoucement = () => {
             register={register("description")}
             error={errors.description?.message}
             placeholder="Digite sua descrição..."
+            disabled={loading}
           />
           <Input
             label="Imagem da capa"
@@ -257,6 +264,7 @@ export const ModalEditAnnoucement = () => {
             register={register("coverImage")}
             error={errors.coverImage?.message}
             placeholder="https://..."
+            disabled={loading}
           />
         </div>
 
@@ -273,12 +281,14 @@ export const ModalEditAnnoucement = () => {
                       error={errors.links?.[index]?.url?.message}
                       placeholder="https://..."
                       formNoValidate
+                      disabled={loading}
                     />
                   </div>
                   <div className="absolute right-0 top-1">
                     <button
                       type="button"
                       className="h-7 w-7 rounded  text-lg font-bold text-red-700"
+                      disabled={loading}
                       onClick={() => {
                         removeUrlLinks(index);
                         const carImagem: IimagesCar = field as IimagesCar;
@@ -297,6 +307,7 @@ export const ModalEditAnnoucement = () => {
           <button
             type="button"
             onClick={addNewUrlLinks}
+            disabled={loading}
             className="w-full max-w-[315px]  rounded border-Brand4 bg-Brand4 px-3 py-3 text-sm font-semibold text-Brand1">
             Adicionar campo para imagem da galeria
           </button>
@@ -306,6 +317,7 @@ export const ModalEditAnnoucement = () => {
           <button
             className="w-auto rounded border-grey6 bg-grey6 px-5 py-3 text-base font-semibold text-grey2 hover:bg-grey5"
             type="button"
+            disabled={loading}
             onClick={closeModal}>
             Cancelar
           </button>
@@ -315,6 +327,7 @@ export const ModalEditAnnoucement = () => {
               openModal("deleteAnnoucement", "Excluir anúncio");
             }}
             type="button"
+            disabled={loading}
             className="w-auto rounded border-Alert2 bg-Alert2 px-5 py-3 text-base  font-semibold text-Alert1 hover:bg-Alert3">
             Excluir anúncio
           </button>
@@ -323,7 +336,7 @@ export const ModalEditAnnoucement = () => {
             type="submit"
             className="w-auto rounded border-Brand1 bg-Brand1 px-5 py-3 text-base  font-semibold text-grey10 hover:bg-Brand2"
             disabled={loading}>
-            {loading ? "Carregando..." : " Salvar alterações"}
+            {loading ? <Spinner color="blue-gray" /> : "Salvar alterações"}
           </button>
         </div>
       </form>

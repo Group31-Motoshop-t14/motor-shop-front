@@ -4,6 +4,8 @@ import { HomeProvider } from "@/contexts/HomeContext";
 import { IListAnnoucementsFilter } from "@/contexts/HomeContext/types";
 import { ModalProvider } from "@/contexts/ModalContext.tsx";
 import { api } from "@/services/api";
+import dynamic from "next/dynamic";
+import { Suspense } from "react";
 
 const getLisAnnouncements = async () => {
   try {
@@ -13,6 +15,11 @@ const getLisAnnouncements = async () => {
     throw new Error("API sendo iniciada");
   }
 };
+
+// const WithCustomLoading = dynamic(() => import("@/Components/Modal"), {
+//   ssr: false,
+//   loading: () => <p>Loading...</p>
+// });
 
 const Home = async () => {
   const listAnnoucements = await getLisAnnouncements();
@@ -38,7 +45,9 @@ const Home = async () => {
               <CarsFilterComponent />
             </div>
           </main>
-          <ModalCustom />
+          <Suspense fallback={<div>Loading...</div>}>
+            <ModalCustom />
+          </Suspense>
         </>
       </ModalProvider>
     </HomeProvider>

@@ -9,6 +9,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { TupdateUser, updateSchema } from "./schema";
+import { toast } from "react-hot-toast";
+import { Spinner } from "@material-tailwind/react";
+import { Button } from "@/Components/Button";
 
 export const ModalEditUser = () => {
   const [loading, setLoading] = useState(false);
@@ -44,12 +47,19 @@ export const ModalEditUser = () => {
   };
 
   const formSubmit = async (data: TupdateUser) => {
+    const toaster = toast.loading("Editando perfil, aguarde!");
     try {
       setLoading(true);
       const response = await api.patch<UserProfile>("/user", data);
       setUserProfile(response.data);
+      toast.dismiss(toaster);
       closeModal();
+      toast.success("Usuário atualizado com sucesso!");
     } catch (error) {
+      console.log(error);
+      toast.dismiss(toaster);
+      toast.error("Erro ao atualizar usuário!");
+    } finally {
       setLoading(false);
     }
   };
@@ -65,6 +75,7 @@ export const ModalEditUser = () => {
           placeholder="Ex: João da Silva"
           register={register("name")}
           error={errors.name?.message}
+          disabled={loading}
         />
         <Input
           label="Email"
@@ -72,6 +83,7 @@ export const ModalEditUser = () => {
           placeholder="Ex: joao@mail.com"
           register={register("email")}
           error={errors.email?.message}
+          disabled={loading}
         />
         <Input
           label="CPF"
@@ -81,6 +93,7 @@ export const ModalEditUser = () => {
           error={errors.cpf?.message}
           maxLength={14}
           onKeyUp={handleCPF}
+          disabled={loading}
         />
         <Input
           label="Celular"
@@ -90,42 +103,55 @@ export const ModalEditUser = () => {
           error={errors.phone?.message}
           maxLength={15}
           onKeyUp={handleNumberPhone}
+          disabled={loading}
         />
         <Input
           label="Data de nascimento"
           type="date"
           register={register("birthDate")}
           error={errors.birthDate?.message}
+          disabled={loading}
         />
         <TextArea
           label="Descrição"
           placeholder="Ex: Sobre mim"
           register={register("description")}
           error={errors.description?.message}
+          disabled={loading}
         />
         <div className="mt-4 flex flex-col gap-4">
-          <button
-            className="w-auto rounded border-grey6 bg-grey6 px-5 py-3 text-base font-semibold text-grey2 hover:bg-grey5"
-            type="button"
-            onClick={closeModal}>
+          <Button
+            onClick={closeModal}
+            variant="gradient"
+            size="primary"
+            fullWidth
+            color="grey"
+            type="button">
             Cancelar
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={() => {
               closeModal();
               openModal("deleteUser", "Excluir usuário");
             }}
             type="button"
-            className="w-auto rounded border-Alert2 bg-Alert2 px-5 py-3 text-base  font-semibold text-Alert1 hover:bg-Alert3">
-            Excluir Perfil
-          </button>
-
-          <button
-            type="submit"
-            className="w-auto rounded border-Brand1 bg-Brand1 px-5 py-3 text-base  font-semibold text-grey10 hover:bg-Brand2"
+            variant="text"
+            color="red"
+            size="primary"
+            fullWidth
             disabled={loading}>
-            {loading ? "Carregando..." : " Salvar alterações"}
-          </button>
+            Excluir Perfil
+          </Button>
+
+          <Button
+            variant="gradient"
+            color="blue"
+            size="primary"
+            fullWidth
+            type="submit"
+            disabled={loading}>
+            {loading ? <Spinner color="blue-gray" /> : " Salvar alterações"}
+          </Button>
         </div>
       </form>
     </div>
