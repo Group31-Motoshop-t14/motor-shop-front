@@ -45,7 +45,7 @@ export const ModalConfirmDeleteAnnoucement = () => {
         </button>
         <button
           disabled={loading}
-          className="w-auto rounded border-Alert2 bg-Alert2 px-5 py-3 text-base  font-semibold text-Alert1 hover:bg-Alert3"
+          className="flex w-auto items-center justify-center rounded border-Alert2 bg-Alert2 px-5 py-3 text-base  font-semibold text-Alert1 hover:bg-Alert3"
           onClick={deleteAnnoucement}>
           {loading ? <Spinner color="blue-gray" /> : "Sim, excluir anúncio"}
         </button>

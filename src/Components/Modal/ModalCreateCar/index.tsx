@@ -375,7 +375,7 @@ export const ModalCreateCar = () => {
           <button
             className={`${
               !isValid || loading ? "border-Brand3 bg-Brand3" : "border-Brand1 bg-Brand1"
-            } w-auto rounded px-5 py-3 text-base font-semibold text-Brand4`}
+            } flex w-auto items-center justify-center rounded px-5 py-3 text-base font-semibold text-Brand4`}
             type="submit"
             disabled={!isValid || loading}>
             {loading ? <Spinner color="blue-gray" /> : "Criar anúncio"}

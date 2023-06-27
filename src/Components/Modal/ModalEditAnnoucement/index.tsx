@@ -334,7 +334,7 @@ export const ModalEditAnnoucement = () => {
 
           <button
             type="submit"
-            className="w-auto rounded border-Brand1 bg-Brand1 px-5 py-3 text-base  font-semibold text-grey10 hover:bg-Brand2"
+            className="flex w-auto items-center justify-center rounded border-Brand1 bg-Brand1  px-5 py-3 text-center text-base font-semibold text-grey10 hover:bg-Brand2"
             disabled={loading}>
             {loading ? <Spinner color="blue-gray" /> : "Salvar alterações"}
           </button>
