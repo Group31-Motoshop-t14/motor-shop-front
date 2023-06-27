@@ -5,6 +5,7 @@ import { Disclosure } from "@headlessui/react";
 import { MinusIcon, PlusIcon } from "@heroicons/react/20/solid";
 import { ChangeEvent, FormEvent, useCallback, useContext, useState } from "react";
 import { Button } from "../Button";
+import { ModalContext } from "@/contexts/ModalContext.tsx";
 
 interface FilterFormProps {
   show?: boolean;
@@ -12,6 +13,7 @@ interface FilterFormProps {
 
 const FilterForm = ({ show }: FilterFormProps) => {
   const { inputValues, setInputValues, clearFilter } = useContext(HomeContext);
+  const { closeModal } = useContext(ModalContext);
   const [model, setModel] = useState("");
   const filteredModels: ModelOption[] = models.options.filter((e) => e.label === model);
   const modelsList: Option[] = filteredModels.length > 0 ? filteredModels[0].options : [];
@@ -35,10 +37,11 @@ const FilterForm = ({ show }: FilterFormProps) => {
     e.preventDefault();
 
     //  lógica do envío do formulario
+    closeModal();
   };
 
   return (
-    <form onSubmit={handleSubmit} className={show ? "m-2" : "col-span-1 hidden lg:block"}>
+    <form className={show ? "m-2" : "col-span-1 hidden lg:block"}>
       {filters.map((section) => (
         <Disclosure as="div" key={section.id} className="border-b border-gray-200 py-6">
           {({ open }) => (
@@ -140,7 +143,12 @@ const FilterForm = ({ show }: FilterFormProps) => {
         </Disclosure>
       ))}
       <div className="lg:hidden">
-        <Button size="primary" variant="gradient" color="blue" fullWidth={true}>
+        <Button
+          size="primary"
+          variant="gradient"
+          color="blue"
+          fullWidth={true}
+          onClick={handleSubmit}>
           Ver anúncios
         </Button>
       </div>

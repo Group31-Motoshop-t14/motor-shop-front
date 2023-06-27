@@ -14,11 +14,10 @@ interface AdvertiserMainProps {
 }
 
 const AdvertiserMain = ({ user }: AdvertiserMainProps) => {
-  const { userAuth } = useContext(AuthContext);
+  const { userAuth, userProfile } = useContext(AuthContext);
   const { openModal } = useContext(ModalContext);
 
   const { cars, setEditAnnoucementModal } = useContext(AnnouncementContext);
-  const { userProfile } = useContext(AuthContext);
 
   const router = useRouter();
 
@@ -27,7 +26,7 @@ const AdvertiserMain = ({ user }: AdvertiserMainProps) => {
       <div className="mx-auto flex w-full max-w-[1600px] flex-col items-center gap-16 px-4">
         <div className="flex w-full max-w-7xl flex-col gap-5 rounded bg-grey10 px-10 py-11">
           <span className="prose-heading-2-600 flex aspect-square h-[104px] w-[104px] items-center justify-center rounded-full bg-Brand1 text-white">
-            {user.id === userProfile?.id
+            {userProfile && user.id === userProfile?.id
               ? userProfile.name[0].toUpperCase()
               : user.name[0].toUpperCase()}
           </span>

@@ -9,8 +9,12 @@ const Comment = ({ comment }: CommentProps) => {
     const currentDate = new Date();
     const commentDate = new Date(comment.createdAt);
     const timeDiff = currentDate.getTime() - commentDate.getTime();
+    const resp =
+      Math.floor(timeDiff / (1000 * 3600 * 24)) === -1
+        ? 0
+        : Math.floor(timeDiff / (1000 * 3600 * 24));
 
-    return Math.floor(timeDiff / (1000 * 3600 * 24));
+    return resp;
   };
 
   return (

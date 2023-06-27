@@ -1,7 +1,9 @@
 import { AnnouncementContext } from "@/contexts/AnnouncementContext";
 import { ModalContext } from "@/contexts/ModalContext.tsx";
 import { api } from "@/services/api";
+import { Spinner } from "@material-tailwind/react";
 import { useContext, useState } from "react";
+import { toast } from "react-hot-toast";
 
 export const ModalConfirmDeleteAnnoucement = () => {
   const [loading, setLoading] = useState(false);
@@ -9,12 +11,19 @@ export const ModalConfirmDeleteAnnoucement = () => {
   const { editAnnoucementModal, setCars } = useContext(AnnouncementContext);
 
   const deleteAnnoucement = async () => {
+    const toaster = toast.loading("Deletando anúncio, aguarde!");
+    setLoading(true);
     try {
-      setLoading(true);
       await api.delete(`/cars/${editAnnoucementModal?.id}`);
       setCars((oldList) => oldList.filter((item) => item.id !== editAnnoucementModal?.id));
+      toast.dismiss(toaster);
+      toast.success("Anúncio deletado com sucesso!");
       closeModal();
     } catch (error) {
+      console.log(error);
+      toast.dismiss(toaster);
+      toast.error("Erro ao deletar anúncio!");
+    } finally {
       setLoading(false);
     }
   };
@@ -36,9 +45,9 @@ export const ModalConfirmDeleteAnnoucement = () => {
         </button>
         <button
           disabled={loading}
-          className="w-auto rounded border-Alert2 bg-Alert2 px-5 py-3 text-base  font-semibold text-Alert1 hover:bg-Alert3"
+          className="flex w-auto items-center justify-center rounded border-Alert2 bg-Alert2 px-5 py-3 text-base  font-semibold text-Alert1 hover:bg-Alert3"
           onClick={deleteAnnoucement}>
-          {loading ? "Excluindo..." : "Sim, excluir anúncio"}
+          {loading ? <Spinner color="blue-gray" /> : "Sim, excluir anúncio"}
         </button>
       </div>
     </div>
