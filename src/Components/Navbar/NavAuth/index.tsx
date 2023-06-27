@@ -32,7 +32,7 @@ export const NavAuth = ({
         id="button-more-options">
         <div className="flex h-full items-center gap-2">
           <span className=" flex h-8 w-8 items-center justify-center rounded-full bg-Brand2 text-sm font-bold leading-none text-grey10">
-            SL
+            {name ? name[0].toLocaleUpperCase() : " "}
           </span>
           <p className=" text-base font-normal leading-7 text-grey2">{name}</p>
         </div>

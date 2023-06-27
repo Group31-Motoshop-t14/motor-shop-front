@@ -10,6 +10,7 @@ import { AuthContext } from "@/contexts/AuthContext";
 import { ModalContext } from "@/contexts/ModalContext.tsx";
 import { api } from "@/services/api";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Spinner } from "@material-tailwind/react";
 import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { commentSchema } from "./schema";
@@ -24,6 +25,7 @@ export const AnnouncementsMain = ({ carsAnnouncement, carComments }: Iannounceme
   const { userAuth, userProfile } = useContext(AuthContext);
 
   const [comments, setComments] = useState(carComments);
+  const [loading, setLoading] = useState(false);
 
   const openModalImageCar = (url: string) => {
     openModal("imageCar", "Imagem do veículo");
@@ -42,11 +44,14 @@ export const AnnouncementsMain = ({ carsAnnouncement, carComments }: Iannounceme
 
   const createComment = async (data: ICommentCreateProps) => {
     try {
+      setLoading(true);
       const res = await api.post<ICommentProps>(`/comments/${carsAnnouncement.id}`, data);
       reset();
       setComments((oldList) => [...oldList, res.data]);
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -152,15 +157,18 @@ export const AnnouncementsMain = ({ carsAnnouncement, carComments }: Iannounceme
                 rows={4}
                 placeholder="Carro muito confortável, foi uma ótima experiência de compra..."
               />
-              <div className="absolute bottom-3 right-3">
+              <div
+                className={`absolute ${
+                  errors.content?.message ? "bottom-9" : "bottom-3"
+                }  right-3`}>
                 <Button
                   variant={"gradient"}
                   color={userAuth ? "blue" : "grey"}
                   size={"secondary"}
                   fullWidth={true}
                   type="submit"
-                  disabled={!userAuth && true}>
-                  Comentar
+                  disabled={(!userAuth && true) || loading}>
+                  {loading ? <Spinner color="blue-gray" /> : "Comentar"}
                 </Button>
               </div>
             </form>
