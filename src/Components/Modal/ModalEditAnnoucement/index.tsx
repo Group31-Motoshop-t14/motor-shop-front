@@ -9,6 +9,7 @@ import { useContext, useEffect, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { editCarSchema, ICarsEdit, IimagesCar } from "./schema";
 import { Spinner } from "@material-tailwind/react";
+import { toast } from "react-hot-toast";
 
 export const ModalEditAnnoucement = () => {
   const [loading, setLoading] = useState(false);
@@ -81,9 +82,10 @@ export const ModalEditAnnoucement = () => {
     const isPublished = isPublishedString == "true"; // transforma o valor do input radio em boolean
     const listLinksToCreate = links.filter((link) => !link.idImage);
     const listLinksToUpdate = links.filter((link) => link.idImage);
+    const toaster = toast.loading("Editando anúncio, aguarde!");
 
+    setLoading(true);
     try {
-      setLoading(true);
       await api.patch(`/cars/${editAnnoucementModal?.id}`, { ...formEditUser, isPublished });
 
       if (listLinksToCreate) {
@@ -124,9 +126,12 @@ export const ModalEditAnnoucement = () => {
           }
         });
       });
+      toast.success("Anúncio editado com sucesso!", { id: toaster });
       closeModal();
     } catch (error) {
       console.log(error);
+      toast.error("Erro ao editar anúncio!", { id: toaster });
+    } finally {
       setLoading(false);
     }
   };

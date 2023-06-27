@@ -22,7 +22,7 @@ export const ModalConfirmDeleteAnnoucement = () => {
     } catch (error) {
       console.log(error);
       toast.dismiss(toaster);
-      toast.error("Erro ao deletar anáncio!");
+      toast.error("Erro ao deletar anúncio!");
     } finally {
       setLoading(false);
     }
