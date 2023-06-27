@@ -9,6 +9,8 @@ import { parseCookies } from "nookies";
 import { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { editAddressSchema, IEditAddress } from "./editAddress.schema";
+import { toast } from "react-hot-toast";
+import { Spinner } from "@material-tailwind/react";
 
 type TAddressProps = {
   bairro: string;
@@ -20,6 +22,7 @@ type TAddressProps = {
 };
 
 export const ModalEditAddress = () => {
+  const [loading, setLoading] = useState(false);
   const { closeModal } = useContext(ModalContext);
   const { userProfile, setUserProfile } = useContext(AuthContext);
   const { zipCodeMask } = useMasks();
@@ -31,7 +34,7 @@ export const ModalEditAddress = () => {
     handleSubmit,
     reset,
     setValue,
-    formState: { errors },
+    formState: { errors, isValid },
     clearErrors
   } = useForm<IEditAddress>({
     resolver: zodResolver(editAddressSchema),
@@ -39,16 +42,24 @@ export const ModalEditAddress = () => {
   });
 
   const editAddress = async (data: IEditAddress) => {
+    const toaster = toast.loading("Editando endereço, aguarde!");
     data.zipCode = data.zipCode?.replace(/\D/g, "");
+    setLoading(true);
     try {
       const cookies = parseCookies();
       const token = cookies["@motors-shop:token"];
       api.defaults.headers.common.authorization = `Bearer ${token}`;
       const response = await api.patch("/user", { ...data });
       setUserProfile(response.data);
+      toast.dismiss(toaster);
+      toast.success("Endereço editado com sucesso!");
       closeModal();
     } catch (error) {
       console.log(error);
+      toast.dismiss(toaster);
+      toast.error("Erro ao editar endereço!");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -116,6 +127,7 @@ export const ModalEditAddress = () => {
           onKeyUp={handleKeyUp}
           register={register("zipCode")}
           error={errors.zipCode?.message}
+          disabled={loading}
         />
         <div className="flex gap-3">
           <Input
@@ -124,6 +136,7 @@ export const ModalEditAddress = () => {
             placeholder="Digitar Estado"
             register={register("state")}
             error={errors.state?.message}
+            disabled={loading}
           />
           <Input
             label="Cidade"
@@ -131,6 +144,7 @@ export const ModalEditAddress = () => {
             placeholder="Digitar Cidade"
             register={register("city")}
             error={errors.city?.message}
+            disabled={loading}
           />
         </div>
         <Input
@@ -139,6 +153,7 @@ export const ModalEditAddress = () => {
           placeholder="Digitar Rua"
           register={register("street")}
           error={errors.street?.message}
+          disabled={loading}
         />
         <div className="flex gap-3">
           <Input
@@ -149,6 +164,7 @@ export const ModalEditAddress = () => {
               shouldUnregister: false
             })}
             error={errors.number?.message}
+            disabled={loading}
           />
           <Input
             label="Complemento"
@@ -157,12 +173,14 @@ export const ModalEditAddress = () => {
             register={register("complement", {
               shouldUnregister: false
             })}
+            disabled={loading}
           />
         </div>
         <div className="mt-9 flex justify-end gap-3">
           <button
             className="w-auto rounded border-grey6 bg-grey6 px-5 py-3 text-base font-semibold text-grey2"
             type="button"
+            disabled={loading}
             onClick={() =>
               reset({
                 // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
@@ -177,9 +195,12 @@ export const ModalEditAddress = () => {
             Cancelar
           </button>
           <button
-            className="w-auto rounded border-Brand3 bg-Brand3 px-5 py-3 text-base font-semibold text-Brand4"
-            type="submit">
-            Salvar Alterações
+            className={`${
+              !isValid || loading ? "border-Brand3 bg-Brand3" : "border-Brand1 bg-Brand1"
+            } w-auto rounded px-5 py-3 text-base font-semibold text-Brand4`}
+            type="submit"
+            disabled={!isValid || loading}>
+            {loading ? <Spinner color="blue-gray" /> : "Salvar alterações"}
           </button>
         </div>
       </form>

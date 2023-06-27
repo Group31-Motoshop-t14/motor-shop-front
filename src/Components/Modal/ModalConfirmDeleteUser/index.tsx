@@ -1,9 +1,12 @@
+import { Button } from "@/Components/Button";
 import { AuthContext } from "@/contexts/AuthContext";
 import { ModalContext } from "@/contexts/ModalContext.tsx";
 import { api } from "@/services/api";
+import { Spinner } from "@material-tailwind/react";
 import { useRouter } from "next/navigation";
 import { destroyCookie } from "nookies";
 import { useContext, useState } from "react";
+import { toast } from "react-hot-toast";
 
 export const ModalConfirmDeleteUser = () => {
   const [loading, setLoading] = useState(false);
@@ -12,6 +15,7 @@ export const ModalConfirmDeleteUser = () => {
   const router = useRouter();
 
   const deleteUser = async () => {
+    const toaster = toast.loading("Deletando sua conta, aguarde!");
     try {
       setLoading(true);
       await api.delete("/user");
@@ -20,9 +24,15 @@ export const ModalConfirmDeleteUser = () => {
       destroyCookie(null, "@motors-shop:token");
       setUserAuth(undefined);
       setUserProfile(undefined);
+      toast.dismiss(toaster);
+      toast.success("Sua conta foi deletada com sucesso!");
       closeModal();
       router.push("/");
     } catch (error) {
+      console.log(error);
+      toast.dismiss(toaster);
+      toast.error("Não foi possível deletar sua conta!");
+    } finally {
       setLoading(false);
     }
   };
@@ -40,12 +50,16 @@ export const ModalConfirmDeleteUser = () => {
           onClick={closeModal}>
           Cancelar
         </button>
-        <button
-          disabled={loading}
-          className="w-auto rounded border-Alert2 bg-Alert2 px-5 py-3 text-base  font-semibold text-Alert1 hover:bg-Alert3"
-          onClick={deleteUser}>
-          {loading ? "Excluindo..." : "Sim, excluir conta"}
-        </button>
+        <Button
+          variant="text"
+          color="red"
+          size="primary"
+          fullWidth
+          type="submit"
+          onClick={deleteUser}
+          disabled={loading}>
+          {loading ? <Spinner color="blue-gray" /> : "Sim, excluir conta"}
+        </Button>
       </div>
     </div>
   );
