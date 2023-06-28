@@ -35,7 +35,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 
 -->
 
-![Logo Motors Shop](https://i.imgur.com/PtPyv4V.png)
+![Logo Motors Shop](https://i.imgur.com/KhXIgFF.png)
 
 ---
 
@@ -75,11 +75,11 @@ Segue os links para mais informações sobre as tecnologias utilizadas:
 
 ## 2. Screenshots
 [ Voltar para o topo ](#tabela-de-conteúdos)
-![Página Home](https://i.imgur.com/TaY3hpS.png)
-![Página de login](https://i.imgur.com/CEX0nDT.png)
-![Página de registro](https://i.imgur.com/8aWfLuQ.png)
-![Página do anúncio](https://i.imgur.com/qwfp3Bt.png)
-![Página dos meus anúncios](https://i.imgur.com/GGpVF2K.png)
+![Página Home](https://i.imgur.com/npDQGfX.png)
+![Página de login](https://i.imgur.com/GJbtCWh.png)
+![Página de registro](https://i.imgur.com/J6KLARL.png)
+![Página do anúncio](https://i.imgur.com/oPOLyeK.png)
+![Página dos meus anúncios](https://i.imgur.com/RjZWnlc.png)
 
 ---
 
