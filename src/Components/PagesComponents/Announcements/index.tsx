@@ -92,9 +92,11 @@ export const AnnouncementsMain = ({ carsAnnouncement, carComments }: Iannounceme
                     })}
                   </span>
                 </div>
-                <Button variant={"gradient"} color={"blue"} size={"secondary"}>
-                  Comprar
-                </Button>
+                {userAuth && (
+                  <Button variant={"gradient"} color={"blue"} size={"secondary"}>
+                    Comprar
+                  </Button>
+                )}
               </div>
             </div>
             <div className="flex flex-col gap-8 rounded bg-grey10 px-5 pb-8 pt-11">

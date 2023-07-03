@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { Button } from "../../../Button";
+import { FaWhatsapp } from "react-icons/fa";
 
 interface AnnouncerCardProps {
   user: {
@@ -20,7 +21,20 @@ const AnnouncerCard = ({ user }: AnnouncerCardProps) => {
         {user.name[0].toUpperCase()}
       </span>
       <span className="prose-heading-6-600 text-grey1">{user.name}</span>
-      <p className="prose-body-1-400 overflow-y-auto text-center text-grey2">{user.description}</p>
+      <div className="space-y-4">
+        <p className="prose-body-1-400 overflow-y-auto text-center text-grey2">
+          {user.description}
+        </p>
+        <div className="flex items-center gap-2">
+          <FaWhatsapp color="#349974" size={24} />
+          <a
+            target="_blank"
+            href={`https://api.whatsapp.com/send?phone=+55+${1234567899}&text=Ol%C3%A1%2C%20venho%20por%20meio%20do%20seu%20portf%C3%B3lio%20na%20internet%2C%20gostaria%20de%20conhecer%20melhor%20seus%20servi%C3%A7os`}
+            className="prose-body-2-500-400 text-grey1">
+            +5599197859
+          </a>
+        </div>
+      </div>
       <Button
         variant={"gradient"}
         color={"black"}
