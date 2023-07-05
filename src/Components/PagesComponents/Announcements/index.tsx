@@ -92,11 +92,9 @@ export const AnnouncementsMain = ({ carsAnnouncement, carComments }: Iannounceme
                     })}
                   </span>
                 </div>
-                {userAuth && (
-                  <Button variant={"gradient"} color={"blue"} size={"secondary"}>
-                    Comprar
-                  </Button>
-                )}
+                <Button variant={"gradient"} color={"blue"} size={"secondary"}>
+                  Comprar
+                </Button>
               </div>
             </div>
             <div className="flex flex-col gap-8 rounded bg-grey10 px-5 pb-8 pt-11">
@@ -138,7 +136,7 @@ export const AnnouncementsMain = ({ carsAnnouncement, carComments }: Iannounceme
             <span className="prose-heading-6-600">Comentários</span>
             <ul className="flex flex-col gap-11">
               {comments.map((comment) => {
-                return <Comment key={comment.id} comment={comment} />;
+                return <Comment key={comment.id} comment={comment} setComments={setComments}/>;
               })}
             </ul>
           </div>
