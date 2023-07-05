@@ -136,7 +136,7 @@ export const AnnouncementsMain = ({ carsAnnouncement, carComments }: Iannounceme
             <span className="prose-heading-6-600">Comentários</span>
             <ul className="flex flex-col gap-11">
               {comments.map((comment) => {
-                return <Comment key={comment.id} comment={comment} setComments={setComments}/>;
+                return <Comment key={comment.id} comment={comment} />;
               })}
             </ul>
           </div>
