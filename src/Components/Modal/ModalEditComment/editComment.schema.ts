@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const editCommentSchema = z.object({
-    content: z.string().optional()
+  content: z.string().optional()
 });
 
-export type EditComment = z.infer<typeof editCommentSchema>
+export type EditComment = z.infer<typeof editCommentSchema>;
