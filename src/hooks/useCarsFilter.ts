@@ -24,7 +24,6 @@ export const useCarsFilter = () => {
     try {
       const response = await api<IcarAnnouncement[]>(`/filters?${queryParams}`);
       const { data } = response;
-      console.log(data);
       setListCarsAnnouncement(data);
     } catch (error) {
       console.log(error);
