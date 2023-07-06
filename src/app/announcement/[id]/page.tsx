@@ -40,13 +40,13 @@ const getComments = async (carId: string) => {
 };
 
 const Announcement = async ({ params }: IPageProps) => {
-  const carsAnnouncement = await getCarAnnouncement(params.id);
-  const carComments = await getComments(carsAnnouncement.id);
+  const carAnnouncement = await getCarAnnouncement(params.id);
+  const carComments = await getComments(carAnnouncement.id);
   return (
     <ModalProvider>
       <>
         <div>
-          <AnnouncementsMain carsAnnouncement={carsAnnouncement} carComments={carComments} />
+          <AnnouncementsMain carsAnnouncement={carAnnouncement} carComments={carComments} />
         </div>
         <ModalCustom />
       </>

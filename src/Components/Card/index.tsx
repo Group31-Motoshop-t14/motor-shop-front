@@ -22,6 +22,7 @@ export interface IcarAnnouncement {
     name: string;
     email: string;
     description: string;
+    phone: string;
   };
   carImages: {
     id: string;

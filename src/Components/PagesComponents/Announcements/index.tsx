@@ -128,7 +128,8 @@ export const AnnouncementsMain = ({ carsAnnouncement, carComments }: Iannounceme
               user={{
                 name: carsAnnouncement.user.name,
                 description: carsAnnouncement.user.description,
-                id: carsAnnouncement.userId
+                id: carsAnnouncement.userId,
+                phone: carsAnnouncement.user.phone
               }}
             />
           </div>
