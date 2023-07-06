@@ -4,7 +4,6 @@ import { HomeProvider } from "@/contexts/HomeContext";
 import { IListAnnoucementsFilter } from "@/contexts/HomeContext/types";
 import { ModalProvider } from "@/contexts/ModalContext.tsx";
 import { api } from "@/services/api";
-import dynamic from "next/dynamic";
 import { Suspense } from "react";
 
 const getLisAnnouncements = async () => {

@@ -9,14 +9,28 @@ export const ModalProvider = ({ children }: ImodalProviderProps) => {
   const [modalType, setModalType] = useState<TmodalTypes>("filterHomePage");
   const [modalTitle, setModalTitle] = useState("Modal Title");
   const [modalImageCarUrl, setModalImageCarUrl] = useState("");
+  const [modalCommentId, setModalCommentId] = useState("");
+  const [modalCommentContent, setModalCommentContent] = useState("");
 
-  const openModal = (type: TmodalTypes, modalTitle: string) => {
+  const openModal = (
+    type: TmodalTypes,
+    modalTitle: string,
+    commentId?: string,
+    content?: string
+  ) => {
     setModalType(type);
     setModalTitle(modalTitle);
     setIsOpen(true);
+    if (commentId) {
+      setModalCommentId(commentId);
+    }
+    if (content) {
+      setModalCommentContent(content);
+    }
   };
 
   const closeModal = () => {
+    setModalCommentId("");
     setIsOpen(false);
   };
 
@@ -29,7 +43,9 @@ export const ModalProvider = ({ children }: ImodalProviderProps) => {
         closeModal,
         modalTitle,
         modalImageCarUrl,
-        setModalImageCarUrl
+        setModalImageCarUrl,
+        modalCommentId,
+        modalCommentContent
       }}>
       {children}
     </ModalContext.Provider>
